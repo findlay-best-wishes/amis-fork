@@ -104,6 +104,38 @@ export class ComboControlPlugin extends BasePlugin {
   // 事件定义
   events: RendererPluginEvent[] = [
     {
+      eventName: 'change',
+      eventLabel: '组合项值变化',
+      description: '组合项值变化',
+      dataSchema: (manager: EditorManager) => {
+        const node = manager.store.getNodeById(manager.store.activeId);
+        const schemas = manager.dataSchema.current.schemas;
+        const dataSchema = schemas.find(
+          item => item.properties?.[node!.schema.name]
+        );
+
+        return [
+          {
+            type: 'object',
+            properties: {
+              data: {
+                type: 'object',
+                title: '数据',
+                properties: {
+                  value: {
+                    type: 'string',
+                    ...((dataSchema?.properties?.[node!.schema.name] as any) ??
+                      {}),
+                    title: '当前组合项值'
+                  }
+                }
+              }
+            }
+          }
+        ];
+      }
+    },
+    {
       eventName: 'add',
       eventLabel: '添加',
       description: '添加组合项时触发',

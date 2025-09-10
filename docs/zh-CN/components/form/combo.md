@@ -1067,6 +1067,7 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
 | delete     | `key: number` 移除项的索引<br />`item: object` 移除项<br />`[name]: object \| object[]` 组件的值                                                                                                                                         | 删除组合项时触发                                         |
 | dragEnd    | `index: number` 拖拽后的索引<br />`oldIndex: number` 拖拽前的索引<br />`item: object` 被拖拽的项<br />`value: object[]` 拖拽后组合项的值<br />`oldValue: object \| object[]` 拖拽前组合项的值<br />`[name]: object \| object[]` 组件的值 | 当组合项拖拽结束且位置发生变化时触发，`6.1.1` 版本后支持 |
 | tabsChange | `key: number` 选项卡索引<br />`item: object` 激活项<br />`[name]: object \| object[]` 组件的值                                                                                                                                           | 当设置 tabsMode 为 true 时，切换选项卡时触发             |
+| change     | `[name]: object \| object[]` 组件的值                                                                                                                                                                                                    | 组合项子项值变化时触发                                   |
 
 ### add
 
@@ -1214,6 +1215,57 @@ combo 还有一个作用是增加层级，比如返回的数据是一个深层�
       }
     }
   ]
+}
+```
+
+### change
+
+```schema: scope="body"
+{
+  "type": "combo",
+  "name": "combo101",
+  "label": "组合多条多行",
+  "multiple": true,
+  "multiLine": true,
+  "value": [
+    {}
+  ],
+  "tabsMode": true,
+  "tabsStyle": "card",
+  "maxLength": 3,
+  "items": [
+    {
+      "name": "a",
+      "label": "文本",
+      "type": "input-text",
+      "placeholder": "文本",
+      "value": "",
+      "size": "full"
+    },
+    {
+      "name": "b",
+      "label": "选项",
+      "type": "select",
+      "options": [
+        "a",
+        "b",
+        "c"
+      ],
+      "size": "full"
+    }
+  ],
+  "onEvent": {
+      "change": {
+          "actions": [
+              {
+                "actionType": "toast",
+                "args": {
+                    "msg": "${event.data.value|json}"
+                }
+              }
+          ]
+      }
+  }
 }
 ```
 

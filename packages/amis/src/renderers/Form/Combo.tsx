@@ -771,7 +771,7 @@ export default class ComboControl extends React.Component<ComboProps> {
     this.props.onChange(value, submitOnChange, true);
   }
 
-  handleChange(values: any, diff: any, {index}: any) {
+  async handleChange(values: any, diff: any, {index}: any) {
     const {
       flat,
       store,
@@ -817,6 +817,13 @@ export default class ComboControl extends React.Component<ComboProps> {
       }
       // 有重复值就不触发修改，因为 KV 模式下无法支持
       if (!hasDuplicateKey) {
+        const changeEvent = await this.props.dispatchEvent(
+          'change',
+          resolveEventData(this.props, {value})
+        );
+        if (changeEvent?.prevented) {
+          return;
+        }
         this.props.onChange(value, submitOnChange, true);
       }
     } else if (type === 'input-kvs') {
@@ -834,9 +841,23 @@ export default class ComboControl extends React.Component<ComboProps> {
       }
       // 有重复值就不触发修改，因为 KV 模式下无法支持重复值
       if (!hasDuplicateKey) {
+        const changeEvent = await this.props.dispatchEvent(
+          'change',
+          resolveEventData(this.props, {value})
+        );
+        if (changeEvent?.prevented) {
+          return;
+        }
         this.props.onChange(value, submitOnChange, true);
       }
     } else {
+      const changeEvent = await this.props.dispatchEvent(
+        'change',
+        resolveEventData(this.props, {value})
+      );
+      if (changeEvent?.prevented) {
+        return;
+      }
       this.props.onChange(value, submitOnChange, true);
     }
 
